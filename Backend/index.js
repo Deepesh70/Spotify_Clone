@@ -6,7 +6,9 @@ const JwtStrategy = require('passport-jwt').Strategy,
 const passport = require('passport');
 const User = require('./Models/User');
 const app = express();
+const authroutes = require('./routes/auth');
 const port = 8000;
+app.use(express.json());
 
 mongoose.connect("mongodb+srv://Deepesh:"+process.env.MONGO_PASSWORD + 
     "@cluster0.4l8pl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
@@ -27,6 +29,8 @@ app.get('/', (req, res) =>{
     res.send("Hello World");
 
 });
+
+app.use("/auth", authroutes);
 
 app.listen(port, () =>{
     console.log('Server is running on port ' + port);

@@ -16,7 +16,7 @@ router.post('/register', async(req, res) => {
 
     }
 
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hashedPassword = bcypt.hash(password, 10);
     const newUserData = {
         email, 
         password: hashedPassword, 
@@ -32,3 +32,5 @@ router.post('/register', async(req, res) => {
     return res.status(200).json(userToReturn);
 
 })
+
+module.exports = router;
