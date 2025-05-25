@@ -25,5 +25,4 @@ router.get("/get/mysongs",
         return res.status(200).json({data: songs});
     }
 );
-
 module.exports = router;
