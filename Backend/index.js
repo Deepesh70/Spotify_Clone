@@ -34,6 +34,7 @@ app.get('/', (req, res) =>{
 });
 
 app.use("/auth", authroutes);
+app.use("/song", songroutes);
 
 app.listen(port, () =>{
     console.log('Server is running on port ' + port);
@@ -44,18 +45,16 @@ app.listen(port, () =>{
 let opts = {}
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = 'secret';
-opts.issuer = 'accounts.examplesoft.com';
-opts.audience = 'yoursite.net';
-passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({_id: jwt_payload.sub}, function(err, user) {
-        if (err) {
-            return done(err, false);
-        }
+
+passport.use(new JwtStrategy(opts, async function(jwt_payload, done) {
+    try {
+        const user = await User.findOne({_id: jwt_payload.sub});
         if (user) {
             return done(null, user);
         } else {
             return done(null, false);
-            // or you could create a new account
         }
-    });
+    } catch (err) {
+        return done(err, false);
+    }
 }));
