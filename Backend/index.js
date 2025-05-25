@@ -27,6 +27,7 @@ mongoose.connect("mongodb+srv://Deepesh:"+process.env.MONGO_PASSWORD +
     console.error("Error connecting to MongoDB", err);
 });
 
+app.use(passport.initialize());
 app.get('/', (req, res) =>{
     res.send("Hello World");
 
@@ -46,7 +47,7 @@ opts.secretOrKey = 'secret';
 opts.issuer = 'accounts.examplesoft.com';
 opts.audience = 'yoursite.net';
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({id: jwt_payload.sub}, function(err, user) {
+    User.findOne({_id: jwt_payload.sub}, function(err, user) {
         if (err) {
             return done(err, false);
         }

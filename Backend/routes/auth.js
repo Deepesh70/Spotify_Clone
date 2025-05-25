@@ -1,13 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const User = require("../Models/User");
-const bcypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 const {getToken} = require('../utils/helpers');
 
 router.post('/register', async(req, res) => {
 
     const {email, password, firstName, lastName, username} = req.body;
 
+    if (!email || !password || !firstName || !lastName || !username) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
     const user = await User.findOne({email:email});
     if (user) { 
         return res
@@ -16,7 +19,7 @@ router.post('/register', async(req, res) => {
 
     }
 
-    const hashedPassword = bcypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUserData = {
         email, 
         password: hashedPassword, 
@@ -41,7 +44,7 @@ router.post('/login', async(req, res) => {
     if(!user){
         return res.status(403).json({error: "No user with this email exists"});
     }
-    const isPasswordValid = await bcypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
     if(!isPasswordValid){
         return res.status(403).json({error:"Incorrect password"});
     }
