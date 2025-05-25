@@ -5,8 +5,10 @@ const JwtStrategy = require('passport-jwt').Strategy,
     ExtractJwt = require('passport-jwt').ExtractJwt;
 const passport = require('passport');
 const User = require('./Models/User');
+
 const app = express();
 const authroutes = require('./routes/auth');
+const songroutes = require('./routes/song');    
 const port = 8000;
 app.use(express.json());
 

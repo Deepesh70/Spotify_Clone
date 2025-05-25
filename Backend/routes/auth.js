@@ -31,6 +31,25 @@ router.post('/register', async(req, res) => {
     delete userToReturn.password;
     return res.status(200).json(userToReturn);
 
+});
+
+router.post('/login', async(req, res) => {
+
+    const {email, password} = req.body;
+
+    const user= await User.findOne({email:email});
+    if(!user){
+        return res.status(403).json({error: "No user with this email exists"});
+    }
+    const isPasswordValid = await bcypt.compare(password, user.password);
+    if(!isPasswordValid){
+        return res.status(403).json({error:"Incorrect password"});
+    }
+
+    const token = await getToken(user.email, user);
+    const userToReturn = {...user.toJSON(), token};
+    delete userToReturn.password;
+    return res.status(200).json(userToReturn);
 })
 
 module.exports = router;
