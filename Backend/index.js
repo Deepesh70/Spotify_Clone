@@ -9,6 +9,7 @@ const User = require('./Models/User');
 const app = express();
 const authroutes = require('./routes/auth');
 const songroutes = require('./routes/song');    
+const playlistRoutes = require('./routes/playlist');
 const port = 8000;
 app.use(express.json());
 
@@ -35,7 +36,7 @@ app.get('/', (req, res) =>{
 
 app.use("/auth", authroutes);
 app.use("/song", songroutes);
-
+app.use("/playlist",playlistRoutes); 
 app.listen(port, () =>{
     console.log('Server is running on port ' + port);
 });
