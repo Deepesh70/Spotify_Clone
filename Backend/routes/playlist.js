@@ -1,8 +1,9 @@
-const ecpress = require("express");
+const express = require("express");
 const passport = require("passport");
 const router = express.Router();
 const Playlist = require("../Models/Playlist");
-const User= require("../Models/User");
+const User = require("../Models/User");
+const Song = require("../Models/Song");
 //Route 1 to create a new playlist
 router.post("/create", passport.authenticate("jwt", {session:false}), async (req, res) => {
     const currentuser = req.user; 
@@ -57,13 +58,19 @@ router.post("/add/song",
         const currentUser =req.user;
         const {playlistId, songId}= req.body;
         if(!playlistId || !songId){
-            return res.status(304).json({err: "Please provide playlistId and songId"});
+            return res.status(400).json({err: "Please provide playlistId and songId"});
         }
+        
+        const playlist = await Playlist.findOne({_id: playlistId});
+        if(!playlist){
+            return res.status(404).json({err: "Playlist not found"});
+        }
+        
         if(
             playlist.owner != currentUser._id &&
             !playlist.collaborators.includes(currentUser._id)
         ){
-            return res.status(400).json({err:"Not Allowed"});
+            return res.status(403).json({err:"Not Allowed"});
         }
 
         const song = await Song.findOne({_id: songId});

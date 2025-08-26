@@ -18,16 +18,14 @@
         songs: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "song",
-        },
-    ],
-        Collaboration: [{
+        }],
+        collaborators: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: "user",
-        },
-    ],
+        }]
     
     });
     
     
-    const PlaylistModel= mongoose.model('Playlist', );
+    const PlaylistModel= mongoose.model('Playlist', Playlist);
     module.exports = PlaylistModel;

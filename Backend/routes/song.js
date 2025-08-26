@@ -28,10 +28,10 @@ router.get("/get/mysongs",
 );
 
 router.get(
-    "/get/artist",
+    "/get/artist/:artistId",
     passport.authenticate("jst",{session:false}),
     async(req,res) => {
-        const {artistId} = req.body;
+        const {artistId} = req.params;
         const artist = await user.find({_id: artistId});
         if(!artist){  
             return res.status   (404).json({error: "Artist not found"});
@@ -42,8 +42,8 @@ router.get(
     }
 )
 
-router.get("/get/name", passport.authenticate("jwt", {session:false}), async (req, res) => {
-    const {songName} = req.body;
+router.get("/get/songname/:songName", passport.authenticate("jwt", {session:false}), async (req, res) => {
+    const {songName} = req.params;
         
         const songs =await Song.find({name:songName});
         return res.status(200).json({data: songs});
